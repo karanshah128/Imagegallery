@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useGlobalState from '../../../Context';
 import Spinner from 'react-spinner-material';
-import { showAlert, validEmail, isNullEmpty, cookies } from '../../../Common/CommonAlert';
+import { showAlert, validEmail, cookies, validUsername, validPassword } from '../../../Common/CommonAlert';
 import { setLoginName, setAuth } from '../../../reducer/action'
 import "../../../css/main.css";
 import "../../../css/react-confirm-alert.css";
@@ -34,34 +34,47 @@ const Login = () => {
     }
   }
 
-
-
   const loginValid = () => {
 
 
-    if (isNullEmpty(userName) && isNullEmpty(passwords) && email) {
+    if (userName && passwords && email) {
       if (userName.length < 8 || passwords.length < 8) {
-        showAlert("Username and password should be minimum of length 8")
+        showAlert("Username and password should be minimum of length 8 and maximum of length 50")
 
       }
       else {
-        if (!(validEmail(email))) {
-          showAlert("Please enter valid email.")
+        if (validUsername(userName)) {
+          if (validPassword(passwords)) {
+            if (validEmail(email)) {
+              dispatch(setAuth(true))
+              cookies('User_name', userName, 1)
+              cookies('Pass_word', passwords, 1)
+              cookies('Email_ID', email, 1)
+              dispatch(setLoginName(userName))
+              history.push("/Home")
+            }
+            else {
+              showAlert("Please enter valid email.")
+            }
+          }
+          else {
+            showAlert("Password should contain alteast one character, one numeric value and one special character.")
+          }
         }
         else {
-          dispatch(setAuth(true))
-          cookies('User_name', userName, 1)
-          cookies('Pass_word', passwords, 1)
-          cookies('Email_ID', email, 1)
-          dispatch(setLoginName(userName))
-          history.push("/Home")
+          showAlert("Username should contain only aplhabets and numbers.")
         }
+
+
       }
+
     }
     else {
       showAlert("Please Enter the Required Fields.")
     }
   }
+
+
   return (
 
     <div id="login-page" className="back-image" style={{ height: "100vh" }}>

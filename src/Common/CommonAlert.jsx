@@ -9,9 +9,8 @@ import Mountain1 from '../Component/Assets/Img/Mountain/Mountain1.jpg'
 import Mountain2 from '../Component/Assets/Img/Mountain/Mountain2.jpg'
 
 export function isNullEmpty(e) {
-var  regex = /^[a-zA-Z0-9]*$/
 
-    if (e === null || e === ''|| e===undefined || regex.test(e)) {
+    if (e === null || e === ''|| e===undefined) {
         return true;
     }
     return false;
@@ -49,11 +48,25 @@ export function showSuccess(msg){
 }
 
 
+export function validUsername(name){
+var  regex = /^[a-zA-Z0-9]*$/
+var response=regex.test(name)
+return response
+}
+
+
+export function validPassword(password){
+  var re =/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-z]).{0,}$/;
+  var response = re.test(password)
+  return response
+} 
+
 export function validEmail(email){
   var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  var response = re.test(email)
+  var response = re.test(email.toLowerCase())
   return response
 }
+
 
 
 export function cookies(name,value,days){
